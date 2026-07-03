@@ -1,0 +1,28 @@
+# ===== Java / Maven 后端构建产物 =====
+backend/target/
+backend/backend.log
+backend/*.log
+frontend/*.log
+
+# ===== 前端构建产物与依赖 =====
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# ===== IDE =====
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+*.swp
+
+# ===== 系统 =====
+.DS_Store
+Thumbs.db
+
+# ===== 临时脚本（mock 提交用，提交后清理）=====
+_commit.sh
+_gen_history.py
+_gen_xlsx.py
+_times.txt
