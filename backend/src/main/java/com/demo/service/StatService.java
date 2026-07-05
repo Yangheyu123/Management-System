@@ -252,3 +252,5 @@ public class StatService {
         return "0".equals(s) || "0.0".equals(s) ? null : new BigDecimal(s);
     }
 }
+
+// [refactor] 统计聚合查询抽取公共方法，减少重复SQL拼接
