@@ -75,31 +75,85 @@ async function onSubmit() {
 .login-wrap {
   min-height: 100vh; display: grid; grid-template-columns: 1.1fr 1fr;
 }
+
+/* 左侧：深咖啡棕 → 琥珀金暖渐变 */
 .login-left {
-  background: linear-gradient(150deg, #0f172a 0%, #1e293b 55%, #2459d6 130%);
-  color: #fff; padding: 56px 64px; display: flex; flex-direction: column; justify-content: center;
+  background: linear-gradient(150deg, #2b2420 0%, #4a3a1f 50%, #946906 125%);
+  color: #fffdf8; padding: 56px 64px;
+  display: flex; flex-direction: column; justify-content: center;
+  position: relative; overflow: hidden;
+  animation: fadeInLeft .6s cubic-bezier(.4,0,.2,1);
+}
+/* 左侧装饰：柔和光晕 */
+.login-left::before {
+  content: ''; position: absolute; width: 420px; height: 420px;
+  right: -160px; top: -120px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(253, 243, 215, .12), transparent 70%);
+  pointer-events: none;
 }
 .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 56px; }
 .brand-mark {
-  width: 40px; height: 40px; border-radius: 10px; background: #fff; color: #2459d6;
-  font-weight: 800; font-size: 20px; display: grid; place-items: center;
+  width: 42px; height: 42px; border-radius: 11px;
+  background: #fffdf8; color: #946906;
+  font-weight: 800; font-size: 21px; display: grid; place-items: center;
+  box-shadow: 0 4px 14px rgba(0,0,0,.18);
 }
 .brand-name { font-size: 16px; font-weight: 600; letter-spacing: .5px; }
-.hero-title { font-size: 34px; line-height: 1.25; font-weight: 700; margin: 0 0 18px; letter-spacing: -.5px; }
-.hero-sub { font-size: 15px; line-height: 1.7; color: #cbd5e1; max-width: 460px; margin: 0 0 28px; }
-.hero-points { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; }
-.hero-points li { display: flex; align-items: center; gap: 10px; color: #e2e8f0; font-size: 14px; }
-.hero-points .el-icon { color: #6ee7b7; font-size: 17px; }
+.hero-title {
+  font-size: 34px; line-height: 1.3; font-weight: 700; margin: 0 0 18px;
+  letter-spacing: -.5px;
+}
+.hero-sub {
+  font-size: 15px; line-height: 1.7; color: #e6d9c4; max-width: 460px; margin: 0 0 30px;
+}
+.hero-points { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 13px; }
+.hero-points li {
+  display: flex; align-items: center; gap: 10px; color: #f0e4d0; font-size: 14px;
+  animation: fadeInUp .5s cubic-bezier(.4,0,.2,1) backwards;
+}
+.hero-points li:nth-child(1) { animation-delay: .2s; }
+.hero-points li:nth-child(2) { animation-delay: .32s; }
+.hero-points li:nth-child(3) { animation-delay: .44s; }
+.hero-points .el-icon { color: #f0c75e; font-size: 17px; }
 
-.login-right { display: grid; place-items: center; background: var(--ink-50); padding: 24px; }
-.login-card { width: 100%; max-width: 380px; }
-.login-title { font-size: 24px; font-weight: 700; margin: 0; color: var(--ink-900); }
-.login-sub { font-size: 14px; color: var(--ink-500); margin: 6px 0 28px; }
-.login-btn { width: 100%; height: 44px; font-size: 15px; font-weight: 600; margin-top: 6px; }
+/* 右侧：奶油底 */
+.login-right {
+  display: grid; place-items: center; background: var(--ink-50); padding: 24px;
+  animation: fadeInRight .6s cubic-bezier(.4,0,.2,1);
+}
+.login-card {
+  width: 100%; max-width: 380px;
+  background: var(--paper, #fffdf8);
+  border: 1px solid var(--ink-200); border-radius: 18px;
+  padding: 40px 36px;
+  box-shadow: 0 12px 40px rgba(74, 63, 54, .08);
+}
+.login-title { font-size: 25px; font-weight: 700; margin: 0; color: var(--ink-900); letter-spacing: -.3px; }
+.login-sub { font-size: 14px; color: var(--ink-500); margin: 6px 0 30px; }
+.login-btn {
+  width: 100%; height: 46px; font-size: 15px; font-weight: 600; margin-top: 6px;
+  letter-spacing: 2px;
+}
 .demo-tip {
-  margin-top: 20px; display: flex; align-items: center; gap: 6px;
-  font-size: 12px; color: var(--ink-500); background: var(--ink-100);
-  padding: 10px 12px; border-radius: var(--radius);
+  margin-top: 22px; display: flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--ink-500); background: var(--brand-50);
+  padding: 11px 13px; border-radius: var(--radius);
+  border: 1px solid rgba(184, 134, 11, .15);
+}
+.demo-tip .el-icon { color: var(--brand-500); }
+
+/* 入场动画 */
+@keyframes fadeInLeft {
+  from { opacity: 0; transform: translateX(-24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 @media (max-width: 900px) {

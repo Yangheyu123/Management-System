@@ -22,12 +22,19 @@ function render() {
 
 onMounted(() => {
   nextTick(render)
-  window.addEventListener('resize', resize)
+  window.addEventListener('resize', debouncedResize)
 })
 onBeforeUnmount(() => {
-  window.removeEventListener('resize', resize)
+  window.removeEventListener('resize', debouncedResize)
+  clearTimeout(timer)
   chart && chart.dispose()
 })
 watch(() => props.option, render, { deep: true })
-function resize() { chart && chart.resize() }
+
+/* resize 防抖：避免窗口拖动时频繁重绘卡顿 */
+let timer = null
+function debouncedResize() {
+  clearTimeout(timer)
+  timer = setTimeout(() => chart && chart.resize(), 150)
+}
 </script>

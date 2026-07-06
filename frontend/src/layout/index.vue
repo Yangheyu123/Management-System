@@ -6,7 +6,7 @@
         <span v-show="!collapsed" class="logo-text">悦居物业</span>
       </div>
       <el-menu :default-active="$route.path" :collapse="collapsed" :collapse-transition="false"
-               router unique-opened background-color="#0f172a" text-color="#cbd5e1" active-text-color="#fff">
+               router unique-opened background-color="#2b2420" text-color="#c9bca9" active-text-color="#fdf3d7">
         <template v-for="r in menuRoutes" :key="r.path">
           <!-- 一级菜单（无子） -->
           <el-menu-item v-if="!r.children || r.children.length === 0" :index="r.path">
@@ -59,7 +59,7 @@
 
       <el-main class="main">
         <router-view v-slot="{ Component }">
-          <transition name="fade" mode="out-in">
+          <transition name="route-slide" mode="out-in">
             <component :is="Component" />
           </transition>
         </router-view>
@@ -142,29 +142,92 @@ async function onCommand(cmd) {
 
 <style scoped>
 .layout { height: 100vh; }
-.aside { background: #0f172a; transition: width .2s; overflow-x: hidden; }
+
+/* 侧边栏：暖色深咖啡棕 */
+.aside {
+  background: #2b2420;
+  transition: width .28s var(--ease, cubic-bezier(.4,0,.2,1));
+  overflow-x: hidden;
+  box-shadow: 2px 0 12px rgba(43, 36, 32, .15);
+}
 .logo {
-  height: 56px; display: flex; align-items: center; gap: 10px; padding: 0 18px; color: #fff;
-  border-bottom: 1px solid rgba(255,255,255,.06);
+  height: 56px; display: flex; align-items: center; gap: 11px; padding: 0 18px;
+  color: #fffdf8; border-bottom: 1px solid rgba(255, 253, 248, .06);
 }
 .logo-mark {
-  width: 30px; height: 30px; border-radius: 8px; background: var(--brand-500);
-  color: #fff; font-weight: 800; display: grid; place-items: center; flex-shrink: 0;
+  width: 32px; height: 32px; border-radius: 9px;
+  background: linear-gradient(135deg, var(--brand-500), var(--brand-600));
+  color: #fffdf8; font-weight: 800; font-size: 15px;
+  display: grid; place-items: center; flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(184, 134, 11, .35);
 }
-.logo-text { font-size: 16px; font-weight: 600; white-space: nowrap; }
-.aside :deep(.el-menu) { border-right: none; }
+.logo-text { font-size: 16px; font-weight: 600; white-space: nowrap; letter-spacing: .3px; }
+.aside :deep(.el-menu) { border-right: none; background: transparent !important; }
+
+/* 菜单项：hover 微亮 + 激活态左侧琥珀金指示条 */
+.aside :deep(.el-menu-item),
+.aside :deep(.el-sub-menu__title) {
+  color: #c9bca9 !important;
+  transition: all .2s var(--ease, cubic-bezier(.4,0,.2,1));
+  position: relative;
+}
+.aside :deep(.el-menu-item:hover),
+.aside :deep(.el-sub-menu__title:hover) {
+  background: rgba(255, 253, 248, .04) !important;
+  color: #fffdf8 !important;
+}
+.aside :deep(.el-menu-item.is-active) {
+  color: #fdf3d7 !important;
+  background: rgba(184, 134, 11, .14) !important;
+}
+/* 激活态左侧指示条 */
+.aside :deep(.el-menu-item.is-active::before) {
+  content: ''; position: absolute; left: 0; top: 8px; bottom: 8px; width: 3px;
+  background: var(--brand-500); border-radius: 0 3px 3px 0;
+  animation: indicatorIn .25s var(--ease, cubic-bezier(.4,0,.2,1));
+}
+@keyframes indicatorIn {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+.aside :deep(.el-sub-menu .el-menu-item) { background-color: rgba(0,0,0,.15) !important; }
+
+/* 顶部 header */
 .header {
-  background: #fff; border-bottom: 1px solid var(--ink-200);
+  background: var(--paper, #fffdf8); border-bottom: 1px solid var(--ink-200);
   display: flex; align-items: center; justify-content: space-between; height: 56px;
+  padding: 0 22px;
 }
 .header-left { display: flex; align-items: center; gap: 14px; }
-.collapse-btn { font-size: 19px; cursor: pointer; color: var(--ink-700); }
+.collapse-btn {
+  font-size: 19px; cursor: pointer; color: var(--ink-500);
+  transition: color .2s, transform .2s;
+}
+.collapse-btn:hover { color: var(--brand-500); transform: scale(1.1); }
 .header-right .user {
   display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--ink-700);
+  padding: 6px 10px; border-radius: 20px;
+  transition: background .2s;
 }
-.avatar { background: var(--brand-500); color: #fff; font-weight: 600; }
+.header-right .user:hover { background: var(--brand-50); }
+.avatar {
+  background: linear-gradient(135deg, var(--brand-500), var(--brand-600)) !important;
+  color: #fffdf8 !important; font-weight: 600;
+  box-shadow: 0 2px 6px rgba(184, 134, 11, .3);
+}
 .uname { font-size: 14px; }
-.main { background: var(--ink-50); padding: 0; overflow-y: auto; }
-.fade-enter-active, .fade-leave-active { transition: opacity .15s; }
-.fade-enter-from, .fade-leave-to { opacity: 0; }
+
+/* 内容区 */
+.main {
+  background: var(--ink-50); padding: 0; overflow-y: auto;
+}
+
+/* 路由切换：淡入 + 上移 */
+.route-slide-enter-active,
+.route-slide-leave-active {
+  transition: opacity .28s var(--ease, cubic-bezier(.4,0,.2,1)),
+              transform .28s var(--ease, cubic-bezier(.4,0,.2,1));
+}
+.route-slide-enter-from { opacity: 0; transform: translateY(10px); }
+.route-slide-leave-to   { opacity: 0; transform: translateY(-6px); }
 </style>
