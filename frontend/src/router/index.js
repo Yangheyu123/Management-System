@@ -47,8 +47,18 @@ export const asyncRoutes = [
 
 const routes = [
   { path: '/login', component: () => import('@/views/login/index.vue'), meta: { title: '登录', public: true } },
+  // 员工端（管理后台）
   { path: '/', component: () => import('@/layout/index.vue'),
     children: asyncRoutes },
+  // 业主端（独立布局）
+  { path: '/portal', component: () => import('@/views/portal/layout.vue'),
+    children: [
+      { path: 'overview', component: () => import('@/views/portal/overview.vue'), meta: { title: '业主首页' } },
+      { path: 'workorders', component: () => import('@/views/portal/workorders.vue'), meta: { title: '我的报修' } },
+      { path: 'bills', component: () => import('@/views/portal/bills.vue'), meta: { title: '我的账单' } },
+      { path: 'houses', component: () => import('@/views/portal/houses.vue'), meta: { title: '我的房屋' } },
+    ]
+  },
   { path: '/:pathMatch(.*)*', redirect: '/dashboard' }
 ]
 
@@ -76,8 +86,17 @@ router.beforeEach(async (to, from, next) => {
       return next('/login')
     }
   }
-  // 权限校验
-  if (to.meta.perm && !store.hasPermission(to.meta.perm)) {
+  // 业主身份判断：userType===2 或 roles 含 OWNER
+  const isOwner = store.userInfo.userType === 2 || (store.userInfo.roles || []).includes('OWNER')
+  // 业主只能进 /portal，员工只能进员工端
+  if (isOwner && !to.path.startsWith('/portal')) {
+    return next('/portal/overview')
+  }
+  if (!isOwner && to.path.startsWith('/portal')) {
+    return next('/dashboard')
+  }
+  // 员工端权限校验
+  if (!isOwner && to.meta.perm && !store.hasPermission(to.meta.perm)) {
     return next('/dashboard')
   }
   next()

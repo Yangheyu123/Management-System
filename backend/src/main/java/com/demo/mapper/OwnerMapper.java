@@ -38,6 +38,10 @@ public interface OwnerMapper {
     @Select("SELECT * FROM owner WHERE id=#{id} AND deleted=0")
     Owner selectById(@Param("id") Long id);
 
+    /** 业主端：按手机号精确匹配业主（演示项目，用 phone 关联 sys_user） */
+    @Select("SELECT * FROM owner WHERE phone=#{phone} AND deleted=0 LIMIT 1")
+    Owner selectByPhone(@Param("phone") String phone);
+
     @Select("SELECT COUNT(1) FROM owner WHERE id_card=#{idCard} AND deleted=0 <if test='id != null'> AND id&lt;&gt;#{id}</if>")
     int countByIdCard(@Param("idCard") String idCard, @Param("id") Long id);
 

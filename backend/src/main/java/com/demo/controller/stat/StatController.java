@@ -30,11 +30,14 @@ public class StatController {
         p.put("communityId", communityId);
         p.put("buildingId", buildingId);
         p.put("feeItemType", feeItemType);
-        p.put("period", period);
-        if (startDate != null) p.put("startDate", LocalDate.parse(startDate).atStartOfDay());
-        if (endDate != null) p.put("endDate", LocalDate.parse(endDate).atStartOfDay());
+        p.put("period", (period == null || period.isEmpty()) ? null : period);
+        if (hasText(startDate)) p.put("startDate", LocalDate.parse(startDate).atStartOfDay());
+        if (hasText(endDate)) p.put("endDate", LocalDate.parse(endDate).atStartOfDay());
         return p;
     }
+
+    /** 判断字符串非空（null 或空串均视为无效，避免 LocalDate.parse("") 抛异常） */
+    private boolean hasText(String s) { return s != null && !s.trim().isEmpty(); }
 
     @GetMapping("/charge/summary")
     @RequirePermission("stat:charge:view")
@@ -62,8 +65,8 @@ public class StatController {
                                                           @RequestParam(required = false) String endDate) {
         Map<String, Object> p = new HashMap<>();
         p.put("communityId", communityId);
-        if (startDate != null) p.put("startDate", LocalDate.parse(startDate).atStartOfDay());
-        if (endDate != null) p.put("endDate", LocalDate.parse(endDate).atStartOfDay());
+        if (hasText(startDate)) p.put("startDate", LocalDate.parse(startDate).atStartOfDay());
+        if (hasText(endDate)) p.put("endDate", LocalDate.parse(endDate).atStartOfDay());
         return Result.success(statService.chargeByType(p));
     }
 
