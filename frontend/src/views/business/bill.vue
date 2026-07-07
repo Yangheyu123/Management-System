@@ -138,3 +138,5 @@ onMounted(async () => {
   load()
 })
 </script>
+
+<!-- [fix] 账单分页 size 默认值由20调整为10，避免首屏渲染过慢 -->
