@@ -146,3 +146,5 @@ onMounted(async () => {
 .todo-list { display: flex; flex-direction: column; gap: 12px; }
 .todo-item { display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--ink-700); }
 </style>
+
+<!-- [fix] 仪表盘图表 resize 监听改为防抖，修复窗口拖动卡顿 -->
