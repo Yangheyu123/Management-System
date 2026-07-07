@@ -55,3 +55,5 @@ public class JwtInterceptor implements HandlerInterceptor {
         UserContext.clear();
     }
 }
+
+// [refactor] token校验失败统一抛出BusinessException，便于全局异常处理
