@@ -20,6 +20,10 @@ frontend/.vite/
 # ===== 系统 =====
 .DS_Store
 Thumbs.db
+# Word 临时锁文件
+~$*.docx
+~$*.xlsx
+~$*.pptx
 
 # ===== 临时脚本（mock 提交用，提交后清理）=====
 _commit.sh
