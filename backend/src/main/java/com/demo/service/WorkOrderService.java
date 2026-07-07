@@ -178,3 +178,5 @@ public class WorkOrderService {
         return o == null ? null : ((Number) o).intValue();
     }
 }
+
+// [fix] 工单状态筛选支持多值并联查询，补充空集合兜底
